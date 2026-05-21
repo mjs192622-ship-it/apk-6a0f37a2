@@ -1,0 +1,88 @@
+name: Build APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Apply custom app icon
+      env:
+        ICON_DATA: "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"
+      run: |
+        echo "$ICON_DATA" | base64 -d > /tmp/app_icon
+        for entry in mdpi:48 hdpi:72 xhdpi:96 xxhdpi:144 xxxhdpi:192; do
+          dir="${entry%%:*}"
+          size="${entry##*:}"
+          mkdir -p "app/src/main/res/mipmap-$dir"
+          convert -resize ${size}x${size}! /tmp/app_icon "app/src/main/res/mipmap-$dir/ic_launcher.png" 2>/dev/null || cp /tmp/app_icon "app/src/main/res/mipmap-$dir/ic_launcher.png"
+          cp "app/src/main/res/mipmap-$dir/ic_launcher.png" "app/src/main/res/mipmap-$dir/ic_launcher_round.png" 2>/dev/null || true
+        done
+
+    - name: Generate placeholder launcher icons if missing
+      run: |
+        for dir in app/src/main/res/mipmap-mdpi app/src/main/res/mipmap-hdpi app/src/main/res/mipmap-xhdpi app/src/main/res/mipmap-xxhdpi app/src/main/res/mipmap-xxxhdpi; do
+          mkdir -p $dir
+          if [ ! -f "$dir/ic_launcher.png" ]; then
+            convert -size 192x192 xc:#6366f1 -fill white -font DejaVu-Sans -pointsize 80 -gravity center -annotate 0 'W' "$dir/ic_launcher.png" 2>/dev/null || \
+            python3 -c "import struct,zlib; data=struct.pack('>IHHI',1,192,192,0); open('$dir/ic_launcher.png','wb').write(b'\x89PNG\r\n\x1a\n'+struct.pack('>I',13)+b'IHDR'+struct.pack('>IIBBBBB',192,192,8,2,0,0,0)+struct.pack('>I',zlib.crc32(b'IHDR'+struct.pack('>IIBBBBB',192,192,8,2,0,0,0))&0xffffffff)+b'\x00'*100)"
+            cp "$dir/ic_launcher.png" "$dir/ic_launcher_round.png" 2>/dev/null || true
+          fi
+        done
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v4
+      with:
+        gradle-version: '8.11.1'
+
+    - name: Build Debug APK
+      run: gradle assembleDebug --no-daemon
+
+    - name: Build Release AAB (for Play Store)
+      run: gradle bundleRelease --no-daemon
+      continue-on-error: true
+
+    - name: Upload Debug APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: debug-apk
+        path: app/build/outputs/apk/debug/*.apk
+
+    - name: Upload Release AAB
+      uses: actions/upload-artifact@v4
+      if: success()
+      continue-on-error: true
+      with:
+        name: release-aab
+        path: app/build/outputs/bundle/release/*.aab
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v2
+      if: success()
+      with:
+        tag_name: build-${{ github.run_number }}
+        name: Build #${{ github.run_number }}
+        files: |
+          app/build/outputs/apk/debug/*.apk
+          app/build/outputs/bundle/release/*.aab
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
